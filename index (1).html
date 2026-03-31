@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umut Şimşek — IB Manager & Business Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050f0a;--bg2:#071510;--bg3:#0a1e14;
+  --teal:#00E5A0;--teal2:#00C484;--teal3:#00FF9F;
+  --teal-dim:rgba(0,229,160,0.1);
+  --text:#E8F5EF;--text-muted:#7DA898;--text-dim:#3D6B55;
+  --border:rgba(0,229,160,0.12);--border2:rgba(0,229,160,0.06);
+  --glass:rgba(0,229,160,0.03);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden;cursor:none}
+.cursor{width:8px;height:8px;background:var(--teal);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:screen}
+.cursor-ring{width:30px;height:30px;border:1px solid rgba(0,229,160,0.4);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.15s ease}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(5,15,10,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-weight:800;font-size:20px;color:var(--text);letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:26px;height:26px;border:1.5px solid var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.nav-logo-icon::after{content:'';width:7px;height:7px;background:var(--teal);border-radius:50%}
+.nav-logo span{color:var(--teal)}
+.nav-links{display:flex;gap:32px;list-style:none;background:rgba(0,229,160,0.04);border:1px solid var(--border);padding:8px 24px;border-radius:100px}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--teal);color:var(--bg);font-weight:700;font-size:14px;padding:10px 24px;border-radius:100px;text-decoration:none;transition:all 0.2s;box-shadow:0 0 24px rgba(0,229,160,0.25)}
+.nav-cta:hover{background:var(--teal3);box-shadow:0 0 40px rgba(0,229,160,0.45);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:120px 48px 80px;text-align:center;overflow:hidden}
+.hero-glow{position:absolute;width:700px;height:450px;background:radial-gradient(ellipse,rgba(0,229,160,0.07) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-content{position:relative;z-index:1;max-width:760px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--teal-dim);border:1px solid var(--border);padding:7px 18px;border-radius:100px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:32px;animation:fadeUp 0.8s 0.1s both}
+.badge-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 6px var(--teal)}50%{opacity:0.3;box-shadow:none}}
+.hero h1{font-weight:900;font-size:clamp(50px,8vw,96px);line-height:0.92;letter-spacing:-3px;margin-bottom:24px;animation:fadeUp 0.8s 0.2s both}
+.h1-solid{display:block;color:var(--text)}
+.h1-outline{display:block;color:transparent;-webkit-text-stroke:1.5px var(--teal);opacity:0.7}
+.h1-teal{display:block;color:var(--teal)}
+.hero-role{font-size:13px;font-weight:600;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px;animation:fadeUp 0.8s 0.3s both}
+.hero-sub{font-size:17px;color:var(--text-muted);max-width:540px;margin:0 auto 44px;line-height:1.8;animation:fadeUp 0.8s 0.38s both}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.5s both}
+.btn-teal{background:var(--teal);color:var(--bg);font-weight:700;font-size:15px;padding:14px 34px;border-radius:100px;text-decoration:none;box-shadow:0 0 30px rgba(0,229,160,0.3);transition:all 0.25s;display:inline-flex;align-items:center;gap:10px}
+.btn-teal:hover{background:var(--teal3);transform:translateY(-2px);box-shadow:0 0 50px rgba(0,229,160,0.5)}
+.btn-ghost{border:1px solid var(--border);color:var(--text-muted);font-weight:500;font-size:15px;padding:13px 30px;border-radius:100px;text-decoration:none;transition:all 0.2s;background:var(--glass)}
+.btn-ghost:hover{border-color:rgba(0,229,160,0.3);color:var(--text)}
+.hero-float{position:absolute;z-index:1;animation:floatY 4s ease-in-out infinite}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.float-card{background:rgba(7,21,16,0.92);border:1px solid var(--border);backdrop-filter:blur(16px);border-radius:16px;padding:14px 18px;min-width:155px}
+.fc-label{font-size:9px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.fc-val{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+.fc-sub{font-size:11px;color:var(--teal);margin-top:3px;font-weight:600}
+.hero-float.fl{left:4%;top:35%;animation-delay:0s}
+.hero-float.fr{right:4%;top:35%;animation-delay:1.5s}
+.hero-float.fr2{right:6%;top:58%;animation-delay:0.8s}
+
+/* STATS */
+.stats-bar{position:relative;z-index:1;background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-around;padding:0 48px}
+.stat-item{padding:26px 16px;text-align:center;border-right:1px solid var(--border2);flex:1;transition:background 0.2s}
+.stat-item:last-child{border-right:none}
+.stat-item:hover{background:var(--glass)}
+.stat-num{font-size:34px;font-weight:900;color:var(--teal);letter-spacing:-1px}
+.stat-lbl{font-size:11px;color:var(--text-dim);margin-top:3px;letter-spacing:0.5px}
+
+/* LANGS */
+.langs-bar{position:relative;z-index:1;padding:16px 48px;background:var(--bg3);border-bottom:1px solid var(--border2);display:flex;gap:36px;align-items:center;overflow-x:auto}
+.langs-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);font-weight:600;white-space:nowrap;margin-right:4px}
+.lang-pill{display:flex;align-items:center;gap:8px;background:var(--teal-dim);border:1px solid var(--border);padding:6px 16px;border-radius:100px;white-space:nowrap;transition:all 0.2s}
+.lang-pill:hover{background:rgba(0,229,160,0.14);border-color:rgba(0,229,160,0.3)}
+.lp-flag{font-size:15px}
+.lp-name{font-size:13px;font-weight:600;color:var(--text)}
+.lp-lvl{font-size:11px;color:var(--teal);margin-left:3px}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.si{max-width:1100px;margin:0 auto;padding:88px 48px}
+.s-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.s-label::before{content:'';width:22px;height:1px;background:var(--teal)}
+.s-title{font-weight:900;font-size:clamp(28px,4vw,48px);letter-spacing:-2px;line-height:1.05;margin-bottom:12px}
+.s-sub{color:var(--text-muted);font-size:16px;max-width:500px;line-height:1.8;margin-bottom:52px}
+
+/* ABOUT */
+.about{background:var(--bg2);border-top:1px solid var(--border2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.about-text p{font-size:15px;color:var(--text-muted);line-height:1.9;margin-bottom:16px}
+.about-text strong{color:var(--text);font-weight:600}
+.about-quote{border-left:2px solid var(--teal);padding:14px 18px;margin:22px 0;background:var(--teal-dim);border-radius:0 10px 10px 0;font-size:14px;color:var(--text-muted);font-style:italic}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.skill-chip{background:var(--glass);border:1px solid var(--border2);color:var(--text-muted);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;transition:all 0.2s;cursor:default}
+.skill-chip:hover{background:var(--teal-dim);border-color:rgba(0,229,160,0.3);color:var(--teal)}
+.info-cards{display:flex;flex-direction:column;gap:10px}
+.info-card{background:var(--glass);border:1px solid var(--border2);border-radius:16px;padding:20px 22px;transition:all 0.25s}
+.info-card:hover{border-color:var(--border);background:var(--teal-dim)}
+.ic-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:7px}
+.ic-val{font-size:14px;color:var(--text);line-height:1.6}
+
+/* EXPERIENCE */
+.exp-wrap{display:flex;flex-direction:column;gap:10px}
+.exp-card{background:var(--glass);border:1px solid var(--border2);padding:30px 34px;border-radius:18px;transition:all 0.25s;position:relative;overflow:hidden}
+.exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border2);transition:background 0.25s;border-radius:3px 0 0 3px}
+.exp-card:hover{border-color:var(--border);background:var(--teal-dim)}
+.exp-card:hover::before,.exp-card.cur::before{background:var(--teal)}
+.exp-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:3px}
+.exp-co{font-weight:900;font-size:19px;letter-spacing:-0.5px}
+.exp-co.now{color:var(--teal)}
+.exp-period{font-size:11px;color:var(--text-dim);font-weight:600;font-family:'Space Mono',monospace;background:var(--glass);border:1px solid var(--border2);padding:3px 11px;border-radius:100px}
+.exp-role{font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.exp-tag{display:inline-block;background:var(--teal-dim);border:1px solid var(--border);color:var(--teal);font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.exp-pts{list-style:none;display:flex;flex-direction:column;gap:6px}
+.exp-pts li{font-size:14px;color:var(--text-muted);padding-left:16px;position:relative;line-height:1.6}
+.exp-pts li::before{content:'›';position:absolute;left:0;color:var(--teal);font-weight:700;font-size:16px;line-height:1.35}
+
+/* SERVICES */
+.svc-section{background:var(--bg2);border-top:1px solid var(--border2)}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:10px}
+.svc-card{background:var(--glass);border:1px solid var(--border2);border-radius:20px;padding:34px 28px;transition:all 0.3s}
+.svc-card:hover{border-color:var(--border);background:rgba(0,229,160,0.05);transform:translateY(-4px)}
+.svc-icon{width:46px;height:46px;background:var(--teal-dim);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:18px}
+.svc-card h3{font-weight:700;font-size:16px;margin-bottom:9px;letter-spacing:-0.3px}
+.svc-card p{font-size:13px;color:var(--text-muted);line-height:1.8}
+
+/* BLOG */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.blog-card{background:var(--glass);border:1px solid var(--border2);border-radius:20px;padding:28px;transition:all 0.25s;cursor:pointer}
+.blog-card:hover{border-color:var(--border);background:var(--teal-dim);transform:translateY(-3px)}
+.blog-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:12px;display:block}
+.blog-card h3{font-weight:700;font-size:15px;letter-spacing:-0.3px;margin-bottom:9px;line-height:1.3}
+.blog-card p{font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:14px}
+.blog-arr{font-size:12px;color:var(--teal);font-weight:700}
+
+/* TESTI */
+.testi-section{background:var(--bg2);border-top:1px solid var(--border2)}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.testi-card{background:var(--glass);border:1px solid var(--border2);border-radius:20px;padding:34px;transition:all 0.25s}
+.testi-card:hover{border-color:var(--border);background:var(--teal-dim)}
+.testi-stars{color:var(--teal);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+.testi-text{font-size:14px;color:var(--text-muted);line-height:1.8;font-style:italic;margin-bottom:22px}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-av{width:40px;height:40px;border-radius:50%;background:var(--teal-dim);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:var(--teal);flex-shrink:0}
+.t-name{font-weight:700;font-size:13px}
+.t-meta{font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.c-items{display:flex;flex-direction:column;gap:9px}
+.c-item{display:flex;align-items:center;gap:14px;background:var(--glass);border:1px solid var(--border2);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--text);transition:all 0.2s}
+.c-item:hover{border-color:var(--border);background:var(--teal-dim)}
+.c-ico{width:36px;height:36px;background:var(--teal-dim);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.c-lbl{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:1px}
+.c-val{font-size:13px;color:var(--text)}
+.cf{display:flex;flex-direction:column;gap:12px}
+.f-lbl{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:5px;display:block}
+.f-inp,.f-ta{width:100%;background:var(--glass);border:1px solid var(--border2);border-radius:11px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;padding:12px 15px;outline:none;transition:border-color 0.2s;resize:none}
+.f-inp:focus,.f-ta:focus{border-color:rgba(0,229,160,0.3)}
+.f-inp::placeholder,.f-ta::placeholder{color:var(--text-dim)}
+.f-ta{height:108px}
+.f-btn{background:var(--teal);color:var(--bg);font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;padding:13px;border:none;border-radius:11px;cursor:pointer;box-shadow:0 0 24px rgba(0,229,160,0.2);transition:all 0.2s}
+.f-btn:hover{background:var(--teal3);box-shadow:0 0 40px rgba(0,229,160,0.4)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:var(--bg2);border-top:1px solid var(--border2);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.f-logo{font-weight:800;font-size:15px;color:var(--text-muted)}
+.f-logo span{color:var(--teal)}
+.f-copy{font-size:12px;color:var(--text-dim)}
+.f-links{display:flex;gap:18px}
+.f-links a{font-size:12px;color:var(--text-dim);text-decoration:none;transition:color 0.2s}
+.f-links a:hover{color:var(--teal)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,160,0.18),transparent)}
+
+@media(max-width:900px){
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  .hero{padding:100px 20px 60px}
+  .hero-float{display:none}
+  .stats-inner{flex-wrap:wrap;padding:0 20px}
+  .stat-item{flex:1 1 40%;border-right:none;border-bottom:1px solid var(--border2)}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:28px}
+  .si{padding:60px 20px}
+  .langs-bar{padding:14px 20px;gap:10px}
+  footer{padding:20px;flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon"></div>
+    Umut<span>.</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Inicio</a></li>
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#estrategias">Estrategias</a></li>
+    <li><a href="#casos">Casos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Contáctame</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-float fl">
+    <div class="float-card">
+      <div class="fc-label">Partners Activos</div>
+      <div class="fc-val">500+</div>
+      <div class="fc-sub">↑ Red en crecimiento</div>
+    </div>
+  </div>
+  <div class="hero-float fr">
+    <div class="float-card">
+      <div class="fc-label">Reparto de Ingresos</div>
+      <div class="fc-val">60%</div>
+      <div class="fc-sub">+ Pago diario</div>
+    </div>
+  </div>
+  <div class="hero-float fr2">
+    <div class="float-card" style="min-width:145px">
+      <div class="fc-label">Mercados</div>
+      <div class="fc-val" style="font-size:14px">LATAM·MENA·TR</div>
+      <div class="fc-sub">4 idiomas</div>
+    </div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="badge-dot"></div>IB Manager · Weltrade · Barcelona</div>
+    <h1>
+      <span class="h1-solid">Umut</span>
+      <span class="h1-outline">Şimşek</span>
+      <span class="h1-teal">IB & BDM</span>
+    </h1>
+    <div class="hero-role">Business Development · FX · Crypto · Sales</div>
+    <p class="hero-sub">Con más de 6 años de experiencia en mercados financieros, desarrollo estrategias de crecimiento para IBs y convierto comunidades en ingresos sostenibles.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-teal">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Trabajemos Juntos
+      </a>
+      <a href="#sobre-mi" class="btn-ghost">Más Información</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">6+</div><div class="stat-lbl">Años de Experiencia</div></div>
+    <div class="stat-item"><div class="stat-num">20+</div><div class="stat-lbl">Personas Lideradas</div></div>
+    <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Idiomas</div></div>
+    <div class="stat-item"><div class="stat-num">150+</div><div class="stat-lbl">Países</div></div>
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-lbl">Partners Activos</div></div>
+  </div>
+</div>
+
+<!-- LANGS -->
+<div class="langs-bar">
+  <span class="langs-lbl">Idiomas</span>
+  <div class="lang-pill"><span class="lp-flag">🇹🇷</span><span class="lp-name">Turco</span><span class="lp-lvl">Nativo</span></div>
+  <div class="lang-pill"><span class="lp-flag">🇬🇧</span><span class="lp-name">Inglés</span><span class="lp-lvl">Fluido</span></div>
+  <div class="lang-pill"><span class="lp-flag">🇪🇸</span><span class="lp-name">Español</span><span class="lp-lvl">Fluido</span></div>
+  <div class="lang-pill"><span class="lp-flag">🇧🇷</span><span class="lp-name">Portugués</span><span class="lp-lvl">Fluido</span></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="sobre-mi">
+  <div class="si">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="s-label">Sobre mí</div>
+        <h2 class="s-title">Generando Resultados en el Mundo Financiero</h2>
+        <p>Soy un <strong>Business Development Manager</strong> orientado a resultados, con más de <strong>6 años de experiencia</strong> en servicios financieros, ventas y experiencia del cliente.</p>
+        <p>En Weltrade actúo como IB Manager, desarrollando carteras de partners B2B e implementando estrategias regionales. En roles anteriores, <strong>lideré un equipo de 20 personas en LATAM</strong>, superando los objetivos de retención y ventas.</p>
+        <div class="about-quote">"Una sola comunidad, con la estrategia correcta y el apoyo adecuado, puede convertirse en una fuente de ingresos extraordinaria."</div>
+        <p>Transformo mi profundo conocimiento en MT4/MT5, CFD, cripto y mercados FX en estrategias de crecimiento prácticas para IBs.</p>
+        <div style="margin-top:26px">
+          <div class="s-label" style="margin-bottom:12px">Especialidades</div>
+          <div class="skills-wrap">
+            <span class="skill-chip">Foreign Exchange (FX)</span>
+            <span class="skill-chip">MT4 & MT5</span>
+            <span class="skill-chip">Criptomonedas</span>
+            <span class="skill-chip">Gestión CRM</span>
+            <span class="skill-chip">Estrategia de Ventas</span>
+            <span class="skill-chip">Retención de Clientes</span>
+            <span class="skill-chip">Gestión de Riesgos</span>
+            <span class="skill-chip">Análisis de Mercado</span>
+            <span class="skill-chip">Partners B2B</span>
+            <span class="skill-chip">Blockchain</span>
+            <span class="skill-chip">Liderazgo de Equipos</span>
+            <span class="skill-chip">Relaciones Públicas</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-cards reveal">
+        <div class="info-card">
+          <div class="ic-lbl">📍 Ubicación</div>
+          <div class="ic-val">Barcelona, España<br><span style="color:var(--text-dim);font-size:12px">Disponible para trabajo global y remoto</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-lbl">💼 Rol Actual</div>
+          <div class="ic-val">Business Development Manager<br><span style="color:var(--teal)">Weltrade.com</span> · 2025 – Presente</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-lbl">🌍 Mercados</div>
+          <div class="ic-val">LATAM · MENA · Turquía · Europa<br><span style="color:var(--text-dim);font-size:12px">Alcance global en 4 idiomas</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-lbl">🔗 Conexiones</div>
+          <div class="ic-val">
+            <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank" style="color:var(--teal);text-decoration:none;display:block">LinkedIn → umutsimsekk</a>
+            <a href="https://github.com/Umuthevi/Umut" target="_blank" style="color:var(--text-muted);text-decoration:none;font-size:13px">GitHub → Umuthevi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experiencia">
+  <div class="si">
+    <div class="s-label">Experiencia</div>
+    <h2 class="s-title">Trayectoria Profesional</h2>
+    <p class="s-sub">6 años de recorrido desde servicios financieros hasta business development.</p>
+    <div class="exp-wrap reveal">
+      <div class="exp-card cur">
+        <div class="exp-top">
+          <div><span class="exp-co now">Weltrade.com</span><span class="exp-tag">Actual</span></div>
+          <span class="exp-period">2025 — Presente</span>
+        </div>
+        <div class="exp-role">Business Development Manager</div>
+        <ul class="exp-pts">
+          <li>Desarrollo de cartera de partners B2B mediante adquisición, retención y gestión estratégica de relaciones</li>
+          <li>Enlace principal entre la empresa y los partners, garantizando comunicación y colaboración efectivas</li>
+          <li>Ejecución de estrategias regionales basadas en investigación de mercado y análisis de competencia</li>
+          <li>Optimización de iniciativas de ventas con herramientas y reportes basados en datos</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-top">
+          <span class="exp-co">TM Group</span>
+          <span class="exp-period">2022 — 2024</span>
+        </div>
+        <div class="exp-role">Team Lead, Retención LATAM</div>
+        <ul class="exp-pts">
+          <li>Liderazgo de equipo de 20 personas en mesas de español y portugués en LATAM, superando objetivos de retención</li>
+          <li>Desarrollo de estrategias de ventas regionales e implementación de mejoras de procesos</li>
+          <li>Formación del personal en ventas avanzadas, CRM y plataformas MT4/MT5</li>
+          <li>Profunda especialización en criptomonedas, blockchain y mercados FX</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-top">
+          <span class="exp-co">Lavixo</span>
+          <span class="exp-period">2019 — 2022</span>
+        </div>
+        <div class="exp-role">Retention Account Manager → Customer Support Executive</div>
+        <ul class="exp-pts">
+          <li>Gestión de relaciones con clientes y CRM, proporcionando análisis de mercado para apoyar decisiones de inversión</li>
+          <li>Asesoramiento a clientes sobre plataformas MT4/MT5 y estrategias de trading</li>
+          <li>Desarrollo de experiencia en CFD, cripto y mercados FX</li>
+          <li>Soporte global: email, chat, teléfono y redes sociales</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="svc-section" id="servicios">
+  <div class="si">
+    <div class="s-label">Servicios</div>
+    <h2 class="s-title">¿Qué Ofrezco?</h2>
+    <p class="s-sub">Servicios que generan resultados concretos para IBs y partners.</p>
+    <div class="svc-grid reveal">
+      <div class="svc-card">
+        <div class="svc-icon">📈</div>
+        <h3>Estrategia de Crecimiento IB</h3>
+        <p>Estrategia personalizada para convertir tu comunidad en una base de traders activos. Optimización de FTD y depósito neto.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">🤝</div>
+        <h3>Desarrollo de Partners B2B</h3>
+        <p>Adquisición de nuevos IBs, activación de partners existentes y gestión de relaciones a largo plazo para un crecimiento sostenible.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">🌎</div>
+        <h3>Mercados LATAM & MENA</h3>
+        <p>Estrategias regionales en español, portugués y turco. Amplia red y experiencia en mercados LATAM y MENA.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">📊</div>
+        <h3>Formación y Coaching en Trading</h3>
+        <p>Formación sobre MT4/MT5, FX, cripto y mercados CFD. Contenidos y programas de coaching que aportan valor a tu comunidad.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">💡</div>
+        <h3>Contenido y Marketing</h3>
+        <p>Estrategia en redes sociales para IBs, plantillas de contenido listas para usar. Optimización de Telegram, Instagram y YouTube.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">🔄</div>
+        <h3>Sistema de Retención</h3>
+        <p>Estrategias sistemáticas de retención para reactivar clientes inactivos y construir fidelidad a largo plazo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="estrategias">
+  <div class="si">
+    <div class="s-label">Estrategias IB</div>
+    <h2 class="s-title">Ideas que Generan Resultados</h2>
+    <p class="s-sub">Estrategias probadas: más FTD, más traders activos, mayor depósito neto.</p>
+    <div class="blog-grid reveal">
+      <div class="blog-card">
+        <span class="blog-tag">Contenido</span>
+        <h3>Educa, No Vendas — Cómo Triplicar tus FTD</h3>
+        <p>Los IBs que publican contenido educativo semanal obtienen en promedio 3 veces más FTD que los que solo promocionan.</p>
+        <div class="blog-arr">Leer estrategia →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Comunidad</span>
+        <h3>500 Miembros en Telegram = 40+ FTD al Mes</h3>
+        <p>Transforma tu grupo de Telegram de canal de señales a centro educativo. Método paso a paso incluido.</p>
+        <div class="blog-arr">Leer estrategia →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Conversión</span>
+        <h3>¿Qué Decirle a Quien Registró Pero No Depositó?</h3>
+        <p>El mensaje personal es 8 veces más efectivo que el email automático. Script listo para usar.</p>
+        <div class="blog-arr">Ver script →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Sub-IB</span>
+        <h3>Multiplica tus Ingresos x5 con una Red Sub-IB</h3>
+        <p>Forma a los traders de tu comunidad como IBs. Gana comisiones de su red. El sistema trabaja por ti.</p>
+        <div class="blog-arr">Ver modelo →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Campaña</span>
+        <h3>Challenge de 30 Días para Generar FTD en Grupo</h3>
+        <p>Organiza un reto mensual en tu comunidad y consigue múltiples FTD en una sola campaña.</p>
+        <div class="blog-arr">Crear campaña →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Retención</span>
+        <h3>Cómo Recuperar un Trader Inactivo en 48 Horas</h3>
+        <p>Trader sin operar 30+ días = comisión perdida. Aquí está la secuencia de mensajes que funciona.</p>
+        <div class="blog-arr">Aplicar fórmula →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="testimonios">
+  <div class="si">
+    <div class="s-label">Testimonios</div>
+    <h2 class="s-title">¿Qué Dicen Mis Partners?</h2>
+    <p class="s-sub">Opiniones reales de IBs y partners con quienes he trabajado.</p>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Gracias a las estrategias de Umut, conseguí 28 FTD en el primer mes. Su atención personalizada y apoyo práctico marcaron una diferencia real."</p>
+        <div class="testi-author">
+          <div class="testi-av">AK</div>
+          <div><div class="t-name">Ahmet K.</div><div class="t-meta">IB Telegram · Estambul</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Tras aplicar la estrategia de contenido, llegué a 180 traders activos en 3 meses. Realmente funciona."</p>
+        <div class="testi-author">
+          <div class="testi-av">SE</div>
+          <div><div class="t-name">Selin E.</div><div class="t-meta">IB Instagram · Ankara</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"El conocimiento de Umut sobre el mercado LATAM y su dominio del español me ayudaron a construir una red de partners mucho más sólida."</p>
+        <div class="testi-author">
+          <div class="testi-av">CR</div>
+          <div><div class="t-name">Carlos R.</div><div class="t-meta">IB Partner · México</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="casos" style="border-top:1px solid var(--border2)">
+<div class="si">
+  <div class="s-label">Casos de Éxito</div>
+  <h2 class="s-title">IB & FTD Growth<br>Case Studies</h2>
+  <p class="s-sub">Campañas reales, estrategias reales, resultados reales. Rol: IB Manager · Sector: Forex / CFD</p>
+
+  <div style="display:flex;flex-direction:column;gap:24px" class="reveal">
+
+    <!-- CASE 1 -->
+    <div class="cs-card" id="cs1">
+      <div class="cs-header">
+        <div class="cs-icon-wrap">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="10" fill="rgba(0,229,160,0.1)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+            <rect x="8" y="22" width="4" height="8" rx="1" fill="#00E5A0"/>
+            <rect x="14" y="16" width="4" height="14" rx="1" fill="#00E5A0" opacity="0.7"/>
+            <rect x="20" y="19" width="4" height="11" rx="1" fill="#00E5A0" opacity="0.5"/>
+            <rect x="26" y="12" width="4" height="18" rx="1" fill="#00E5A0" opacity="0.9"/>
+            <path d="M9 14 L15 10 L21 13 L27 7" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="27" cy="7" r="2" fill="#00E5A0"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cs-num">Case Study 01</div>
+          <div class="cs-title">🎮 Trading Demo Tournament</div>
+        </div>
+        <div class="cs-tag">Adquisición · FTD</div>
+      </div>
+      <div class="cs-body">
+        <div class="cs-col">
+          <div class="cs-section-label">Objetivo</div>
+          <p class="cs-text">Aumentar la adquisición en la parte superior del embudo y convertir traders demo en clientes reales (FTD).</p>
+          <div class="cs-section-label" style="margin-top:16px">Estrategia</div>
+          <p class="cs-text">Competición de trading demo gamificada con entrada sin riesgo, mientras se construía un embudo de conversión estructurado hacia cuentas reales.</p>
+          <div class="cs-section-label" style="margin-top:16px">Elementos Clave</div>
+          <ul class="cs-list">
+            <li>Competición con tabla de clasificación</li>
+            <li>Recompensas basadas en rendimiento</li>
+            <li>Campaña de tiempo limitado para crear urgencia</li>
+            <li>Adquisición de tráfico impulsada por IBs</li>
+          </ul>
+        </div>
+        <div class="cs-col">
+          <div class="cs-section-label">Ejecución</div>
+          <ul class="cs-list">
+            <li>Concurso demo dirigido a regiones de alto volumen</li>
+            <li>Colaboración con IBs para impulsar registros</li>
+            <li>Embudos de conversión post-competición (bonus / seguimiento)</li>
+            <li>Retargeting de usuarios demo de alto rendimiento</li>
+          </ul>
+          <div class="cs-section-label" style="margin-top:16px">Resultados</div>
+          <div class="cs-metrics">
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Registros</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">FTD Rate</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">FTD Volume</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Net Deposit</div></div>
+          </div>
+          <div class="cs-insight">💡 <strong>Key Insight:</strong> Las campañas de entrada baja aumentan significativamente el volumen de adquisición, pero la conversión depende del seguimiento estructurado y el engagement de los IBs.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE 2 -->
+    <div class="cs-card" id="cs2">
+      <div class="cs-header">
+        <div class="cs-icon-wrap">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="10" fill="rgba(0,229,160,0.1)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+            <circle cx="18" cy="18" r="8" stroke="#00E5A0" stroke-width="1.5" fill="none"/>
+            <circle cx="18" cy="18" r="3" fill="#00E5A0"/>
+            <path d="M18 10V8M18 28V26M10 18H8M28 18H26" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12.5 12.5L11 11M24.5 23.5L23 22M23.5 12.5L25 11M12.5 23.5L11 25" stroke="#00E5A0" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cs-num">Case Study 02</div>
+          <div class="cs-title">🔫 Paintball Campaign for Traders</div>
+        </div>
+        <div class="cs-tag">Engagement · Retención</div>
+      </div>
+      <div class="cs-body">
+        <div class="cs-col">
+          <div class="cs-section-label">Objetivo</div>
+          <p class="cs-text">Aumentar el engagement y FTD combinando actividad de trading con incentivos basados en lifestyle.</p>
+          <div class="cs-section-label" style="margin-top:16px">Estrategia</div>
+          <p class="cs-text">Campaña no tradicional que vincula el rendimiento en trading con una experiencia competitiva del mundo real (paintball), dirigida a la psicología del trader.</p>
+          <div class="cs-section-label" style="margin-top:16px">Elementos Clave</div>
+          <ul class="cs-list">
+            <li>Challenge de trading gamificado</li>
+            <li>Recompensa lifestyle en lugar de bonus tradicional</li>
+            <li>Participación social y comunitaria</li>
+          </ul>
+        </div>
+        <div class="cs-col">
+          <div class="cs-section-label">Ejecución</div>
+          <ul class="cs-list">
+            <li>Campaña promovida vía red de IBs y canales sociales</li>
+            <li>Trading posicionado como competitivo y divertido</li>
+            <li>Actividad de trading repetida para clasificarse</li>
+            <li>Dinámica comunitaria para aumentar participación</li>
+          </ul>
+          <div class="cs-section-label" style="margin-top:16px">Resultados</div>
+          <div class="cs-metrics">
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Engagement</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Volumen</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">FTD</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Retención</div></div>
+          </div>
+          <div class="cs-insight">💡 <strong>Key Insight:</strong> Las recompensas no financieras pueden superar los bonos tradicionales al aumentar el engagement emocional y la participación comunitaria.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE 3 -->
+    <div class="cs-card" id="cs3">
+      <div class="cs-header">
+        <div class="cs-icon-wrap">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="10" fill="rgba(0,229,160,0.1)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+            <circle cx="13" cy="13" r="4" stroke="#00E5A0" stroke-width="1.5" fill="none"/>
+            <path d="M7 27c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M22 16l2 2 5-5" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M24 22h6M24 25h4" stroke="#00E5A0" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cs-num">Case Study 03</div>
+          <div class="cs-title">🧠 Trader to Entrepreneur Funnel</div>
+        </div>
+        <div class="cs-tag">IB Conversion · Escalabilidad</div>
+      </div>
+      <div class="cs-body">
+        <div class="cs-col">
+          <div class="cs-section-label">Objetivo</div>
+          <p class="cs-text">Convertir traders existentes en IBs para aumentar los ingresos a largo plazo y la escalabilidad de la red.</p>
+          <div class="cs-section-label" style="margin-top:16px">Estrategia</div>
+          <p class="cs-text">Embudo estructurado para reposicionar traders como potenciales partners (IBs), enfocado en educación, incentivos y potencial de ingresos a largo plazo.</p>
+          <div class="cs-section-label" style="margin-top:16px">Elementos Clave</div>
+          <ul class="cs-list">
+            <li>Posicionamiento educativo "Trader → Entrepreneur"</li>
+            <li>Embudo de onboarding IB</li>
+            <li>Incentivos de revenue sharing</li>
+            <li>Construcción de relaciones a largo plazo</li>
+          </ul>
+        </div>
+        <div class="cs-col">
+          <div class="cs-section-label">Ejecución</div>
+          <ul class="cs-list">
+            <li>Identificación de traders de alto rendimiento y engagement</li>
+            <li>Oportunidad IB introducida a través de mensajería dirigida</li>
+            <li>Soporte y guía de onboarding proporcionados</li>
+            <li>IBs incentivados a construir sus propios embudos</li>
+          </ul>
+          <div class="cs-section-label" style="margin-top:16px">Resultados</div>
+          <div class="cs-metrics">
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Nuevos IBs</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">IB FTD</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Red</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">LTV</div></div>
+          </div>
+          <div class="cs-insight">💡 <strong>Key Insight:</strong> Convertir traders en partners crea un motor de adquisición escalable y mejora significativamente el lifetime value.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE 4 -->
+    <div class="cs-card" id="cs4">
+      <div class="cs-header">
+        <div class="cs-icon-wrap">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="10" fill="rgba(0,229,160,0.1)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+            <path d="M18 8l2.5 5 5.5.8-4 3.9.9 5.5L18 20.5l-4.9 2.7.9-5.5-4-3.9 5.5-.8z" stroke="#00E5A0" stroke-width="1.5" stroke-linejoin="round" fill="rgba(0,229,160,0.15)"/>
+            <rect x="10" y="26" width="16" height="3" rx="1.5" fill="#00E5A0" opacity="0.4"/>
+            <rect x="13" y="24" width="10" height="2" rx="1" fill="#00E5A0" opacity="0.6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cs-num">Case Study 04</div>
+          <div class="cs-title">🏆 IB Champions League</div>
+        </div>
+        <div class="cs-tag">Gamificación · Red IB</div>
+      </div>
+      <div class="cs-body">
+        <div class="cs-col">
+          <div class="cs-section-label">Objetivo</div>
+          <p class="cs-text">Aumentar la productividad de los IBs e incrementar FTD y depósitos netos mediante competición y gamificación.</p>
+          <div class="cs-section-label" style="margin-top:16px">Estrategia</div>
+          <p class="cs-text">Sistema de clasificación competitivo inspirado en ligas deportivas, donde los IBs compiten basándose en métricas de rendimiento.</p>
+          <div class="cs-section-label" style="margin-top:16px">Elementos Clave</div>
+          <ul class="cs-list">
+            <li>Sistema de ranking con tabla de clasificación</li>
+            <li>Recompensas basadas en rendimiento</li>
+            <li>Segmentación de competición regional</li>
+            <li>Foco en métricas de ingresos (FTD + Net Deposit + Volumen)</li>
+          </ul>
+        </div>
+        <div class="cs-col">
+          <div class="cs-section-label">Ejecución</div>
+          <ul class="cs-list">
+            <li>Activación de red IB existente</li>
+            <li>Dinámica competitiva introducida (ranking, estatus, recompensas)</li>
+            <li>IBs incentivados a escalar sus esfuerzos de adquisición</li>
+            <li>Rendimiento monitoreado e incentivos optimizados</li>
+          </ul>
+          <div class="cs-section-label" style="margin-top:16px">Resultados</div>
+          <div class="cs-metrics">
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">FTD</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Net Deposit</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">IBs Activos</div></div>
+            <div class="cs-metric"><div class="cs-metric-val">+↑</div><div class="cs-metric-lbl">Performance</div></div>
+          </div>
+          <div class="cs-insight">💡 <strong>Key Insight:</strong> La gamificación y la competición aumentan significativamente el rendimiento de los IBs, especialmente cuando se alinean con incentivos basados en ingresos.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<style>
+.cs-card{background:var(--glass);border:1px solid var(--border2);border-radius:20px;overflow:hidden;transition:all 0.3s}
+.cs-card:hover{border-color:var(--border);background:rgba(0,229,160,0.04)}
+.cs-header{display:flex;align-items:center;gap:16px;padding:24px 32px;border-bottom:1px solid var(--border2);flex-wrap:wrap}
+.cs-icon-wrap{flex-shrink:0}
+.cs-num{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:3px}
+.cs-title{font-weight:800;font-size:18px;letter-spacing:-0.5px;color:var(--text)}
+.cs-tag{margin-left:auto;font-size:11px;background:var(--teal-dim);border:1px solid var(--border);color:var(--teal);padding:5px 14px;border-radius:100px;font-weight:600;letter-spacing:0.5px;white-space:nowrap}
+.cs-body{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0}
+.cs-col{padding:28px 32px}
+.cs-col:first-child{border-right:1px solid var(--border2)}
+.cs-section-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:8px}
+.cs-text{font-size:13px;color:var(--text-muted);line-height:1.7}
+.cs-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.cs-list li{font-size:13px;color:var(--text-muted);padding-left:14px;position:relative;line-height:1.5}
+.cs-list li::before{content:'›';position:absolute;left:0;color:var(--teal);font-weight:700}
+.cs-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.cs-metric{background:var(--teal-dim);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.cs-metric-val{font-size:20px;font-weight:900;color:var(--teal);letter-spacing:-0.5px}
+.cs-metric-lbl{font-size:10px;color:var(--text-dim);margin-top:3px;letter-spacing:0.5px}
+.cs-insight{margin-top:16px;background:rgba(0,229,160,0.06);border-left:2px solid var(--teal);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12px;color:var(--text-muted);line-height:1.6}
+.cs-insight strong{color:var(--teal)}
+@media(max-width:768px){
+  .cs-body{grid-template-columns:1fr}
+  .cs-col:first-child{border-right:none;border-bottom:1px solid var(--border2)}
+  .cs-header{padding:18px 20px}
+  .cs-col{padding:20px}
+  .cs-tag{margin-left:0}
+}
+</style>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="si">
+    <div class="s-label">Contacto</div>
+    <h2 class="s-title">Hablemos</h2>
+    <p class="s-sub">Contáctame para convertirte en IB, hablar de estrategias de crecimiento o explorar colaboraciones.</p>
+    <div class="contact-grid reveal">
+      <div class="c-items">
+        <a href="tel:+34610732053" class="c-item">
+          <div class="c-ico">📞</div>
+          <div><div class="c-lbl">Teléfono</div><div class="c-val">+34 610 732 053</div></div>
+        </a>
+        <a href="mailto:simsekk.umut@gmail.com" class="c-item">
+          <div class="c-ico">✉️</div>
+          <div><div class="c-lbl">Correo</div><div class="c-val">simsekk.umut@gmail.com</div></div>
+        </a>
+        <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank" class="c-item">
+          <div class="c-ico">💼</div>
+          <div><div class="c-lbl">LinkedIn</div><div class="c-val">linkedin.com/in/umutsimsekk</div></div>
+        </a>
+        <div class="c-item" style="cursor:default">
+          <div class="c-ico">📍</div>
+          <div><div class="c-lbl">Ubicación</div><div class="c-val">Barcelona, España</div></div>
+        </div>
+      </div>
+      <div class="cf">
+        <div><label class="f-lbl">Tu Nombre</label><input type="text" class="f-inp" placeholder="Nombre Apellido" id="fn"></div>
+        <div><label class="f-lbl">Correo Electrónico</label><input type="email" class="f-inp" placeholder="email@ejemplo.com" id="fe"></div>
+        <div><label class="f-lbl">Asunto</label><input type="text" class="f-inp" placeholder="Quiero ser IB / Colaboración / Otro" id="fs"></div>
+        <div><label class="f-lbl">Mensaje</label><textarea class="f-ta" placeholder="Escribe tu mensaje aquí..." id="fm"></textarea></div>
+        <button class="f-btn" id="fsub">Enviar Mensaje →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<footer>
+  <div class="f-logo">Umut<span>Şimşek</span></div>
+  <div class="f-copy">© 2025 Umut Şimşek · IB Manager & Business Development</div>
+  <div class="f-links">
+    <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank">LinkedIn</a>
+    <a href="https://github.com/Umuthevi/Umut" target="_blank">GitHub</a>
+    <a href="mailto:simsekk.umut@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=rx-15+'px';curR.style.top=ry-15+'px';requestAnimationFrame(ar);})();
+document.querySelectorAll('a,button,.blog-card,.svc-card,.exp-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{curR.style.transform='scale(1.6)';curR.style.borderColor='rgba(0,229,160,0.7)';});
+  el.addEventListener('mouseleave',()=>{curR.style.transform='scale(1)';curR.style.borderColor='rgba(0,229,160,0.4)';});
+});
+
+/* CANVAS */
+const cv=document.getElementById('bg-canvas'),ctx=cv.getContext('2d');
+let W,H,pts=[],fr=0;
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;build();}
+function build(){pts=[];let y=H*0.6;for(let i=0;i<=140;i++){y+=(Math.random()-0.49)*18+(Math.random()<0.04?(Math.random()-0.5)*45:0);y=Math.max(H*0.15,Math.min(H*0.88,y));pts.push({x:(i/140)*W,y});}}
+function draw(){
+  ctx.clearRect(0,0,W,H);fr++;
+  ctx.strokeStyle='rgba(0,229,160,0.04)';ctx.lineWidth=0.5;
+  for(let i=0;i<12;i++){ctx.beginPath();ctx.moveTo(0,(i/12)*H);ctx.lineTo(W,(i/12)*H);ctx.stroke();}
+  for(let i=0;i<24;i++){ctx.beginPath();ctx.moveTo((i/24)*W,0);ctx.lineTo((i/24)*W,H);ctx.stroke();}
+  if(pts.length<2)return;
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length;i++)ctx.quadraticCurveTo(pts[i-1].x,pts[i-1].y,(pts[i-1].x+pts[i].x)/2,(pts[i-1].y+pts[i].y)/2);
+  ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,229,160,0.07)');g.addColorStop(1,'rgba(0,229,160,0)');
+  ctx.fillStyle=g;ctx.fill();
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length;i++)ctx.quadraticCurveTo(pts[i-1].x,pts[i-1].y,(pts[i-1].x+pts[i].x)/2,(pts[i-1].y+pts[i].y)/2);
+  ctx.strokeStyle='rgba(0,229,160,0.3)';ctx.lineWidth=1.5;ctx.stroke();
+  const maw=10;ctx.beginPath();
+  for(let i=maw;i<pts.length;i++){const a=pts.slice(i-maw,i).reduce((s,p)=>s+p.y,0)/maw;if(i===maw)ctx.moveTo(pts[i].x,a);else ctx.lineTo(pts[i].x,a);}
+  ctx.strokeStyle='rgba(0,255,120,0.18)';ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.stroke();ctx.setLineDash([]);
+  const bw=W/pts.length*0.5;
+  for(let i=1;i<pts.length;i++){
+    const x=pts[i].x,o=pts[i-1].y,c=pts[i].y,bull=c<o;
+    ctx.strokeStyle=bull?'rgba(0,229,160,0.35)':'rgba(0,160,80,0.25)';ctx.lineWidth=0.7;
+    ctx.beginPath();ctx.moveTo(x,Math.min(o,c)-Math.random()*7);ctx.lineTo(x,Math.max(o,c)+Math.random()*7);ctx.stroke();
+    ctx.fillStyle=bull?'rgba(0,229,160,0.12)':'rgba(0,180,90,0.08)';
+    ctx.fillRect(x-bw/2,Math.min(o,c),bw,Math.abs(c-o)||1);
+  }
+  const last=pts[pts.length-1],p=Math.sin(fr*0.06)*0.5+0.5;
+  ctx.beginPath();ctx.arc(last.x,last.y,6+p*4,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,160,${0.12+p*0.18})`;ctx.fill();
+  ctx.beginPath();ctx.arc(last.x,last.y,3,0,Math.PI*2);ctx.fillStyle='#00E5A0';ctx.fill();
+  ctx.beginPath();ctx.arc(last.x,last.y,1.5,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+}
+let sO=0;
+(function anim(){
+  sO+=0.25;const st=W/pts.length;
+  if(sO>st){sO=0;pts.shift();const l=pts[pts.length-1],ny=l.y+(Math.random()-0.49)*16;pts.push({x:l.x+st,y:Math.max(H*0.15,Math.min(H*0.88,ny))});pts.forEach((p,i)=>p.x=(i/pts.length)*W);}
+  draw();requestAnimationFrame(anim);
+})();
+window.addEventListener('resize',resize);resize();
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){Array.from(e.target.children).forEach((c,i)=>{c.style.transitionDelay=i*0.08+'s';});setTimeout(()=>e.target.classList.add('visible'),60);}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* FORM */
+document.getElementById('fsub').addEventListener('click',()=>{
+  const n=document.getElementById('fn').value.trim(),e=document.getElementById('fe').value.trim(),m=document.getElementById('fm').value.trim();
+  if(n&&e&&m){
+    const s=document.getElementById('fs').value||'Contacto';
+    window.location.href=`mailto:simsekk.umut@gmail.com?subject=Web - ${encodeURIComponent(s)}&body=${encodeURIComponent('Nombre: '+n+'\nEmail: '+e+'\n\n'+m)}`;
+  }else{
+    const b=document.getElementById('fsub');
+    b.textContent='¡Por favor completa todos los campos!';
+    b.style.background='rgba(0,229,160,0.2)';
+    setTimeout(()=>{b.textContent='Enviar Mensaje →';b.style.background='';},2500);
+  }
+});
+</script>
+</body>
+</html>
